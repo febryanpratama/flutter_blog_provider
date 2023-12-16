@@ -17,6 +17,7 @@ class HomeController extends ChangeNotifier {
   DetailDataModelNew? detailBlog;
   bool isLoading = false;
   // DetailDataModelNew? get detailBlog => _detailBlog;
+  bool isLoadData = false;
 
   String? selectedOption = "published";
 
@@ -37,12 +38,18 @@ class HomeController extends ChangeNotifier {
   // String? get selectedLocation => _selectedLocation;
 
   // get Blog
-  Future getBlog() async {
+
+  // Future.delayed(duration)
+  Future<void> getBlog() async {
+    isLoadData = true;
+
     var resp = await _blogRepository.getBLog(paramAuthor, paramDate, paramStatus);
-    // print("resp${resp}");
     _data = resp?.data;
 
-    print(_data?.length);
+    // print("resp${resp}");
+
+    print(blog?[0].title);
+    isLoadData = false;
     notifyListeners();
   }
 
@@ -91,6 +98,18 @@ class HomeController extends ChangeNotifier {
       print("err");
       print(e.toString());
     }
+  }
+
+  Future<void> setAuthor(String newAuthor) async {
+    paramAuthor = newAuthor;
+    await getBlog();
+  }
+
+  Future<void> setStatus(String newStatus) async {
+    paramStatus = newStatus;
+    // notifyListeners();
+
+    await getBlog();
   }
 
 

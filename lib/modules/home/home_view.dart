@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_provider/modules/home/_components/filter_component.dart';
 import 'package:flutter_blog_provider/modules/home/_components/header_view.dart';
 import 'package:flutter_blog_provider/modules/home/home_controller.dart';
 import 'package:flutter_blog_provider/utils/routes/routes_name.dart';
@@ -13,10 +14,11 @@ class HomeView extends StatelessWidget {
     'Author',
   ];
 
+
   @override
   Widget build(BuildContext context) {
     // final arguments =
-    List<int> data = [5, 10, 11,21,34];
+    List<int> data = [5, 10, 11, 21, 34];
     return ChangeNotifierProvider(
       create: (context) => HomeController()..getBlog(),
       builder: (context, child) {
@@ -174,9 +176,7 @@ class HomeView extends StatelessWidget {
                                           height: 20,
                                         ),
                                         Expanded(
-                                          child: ListView(
-                                            children: newMethod,
-                                          ),
+                                          child: FilterComponent()
                                         )
                                       ],
                                     ),
@@ -198,72 +198,75 @@ class HomeView extends StatelessWidget {
                     ),
                     Consumer<HomeController>(
                         builder: (context, dataProvider, _) {
-                      // print(dataProvider.blog?.length);
-                      if (dataProvider.blog?.length == 0) {
+                      print(dataProvider.blog?[0]);
+                      if (dataProvider.isLoadData!) {
                         return Center(
                           child: CircularProgressIndicator(),
                         );
                       } else {
-                        return ListView.builder(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                          ),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: dataProvider.blog?.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // dataProvider.getDetail(context,
-                                    //     id: dataProvider.blog?[index].id ?? 0);
+                        return Expanded(
+                          child: ListView.builder(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                            ),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: dataProvider.blog?.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      // dataProvider.getDetail(context,
+                                      //     id: dataProvider.blog?[index].id ?? 0);
 
-                                    Navigator.pushNamed(
-                                        context, RoutesName.detailBlog,
-                                        arguments: {
-                                          "id": dataProvider.blog?[index].id
-                                        });
-                                    // print(dataProvider.blog?[index].id.runtimeType);
-                                  },
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    height: 60,
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFFCEED4),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          dataProvider.blog?[index].title ?? "",
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w900,
+                                      Navigator.pushNamed(
+                                          context, RoutesName.detailBlog,
+                                          arguments: {
+                                            "id": dataProvider.blog?[index].id
+                                          });
+                                      // print(dataProvider.blog?[index].id.runtimeType);
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      height: 60,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFFFCEED4),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            dataProvider.blog?[index].title ??
+                                                "",
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w900,
+                                            ),
                                           ),
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Colors.black,
-                                          size: 30,
-                                        ),
-                                      ],
+                                          Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: Colors.black,
+                                            size: 30,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                              ],
-                            );
-                          },
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         );
                         // return Container(
                         //   width: MediaQuery.of(context).size.width * 0.9,
@@ -311,59 +314,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  List<Widget> get newMethod {
-    return [
-      InkWell(
-        onTap: () {
-          print("date");
-        },
-        child: Container(
-          child: Text(
-            "Date",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-      Divider(
-        color: Colors.black,
-      ),
-      InkWell(
-        onTap: () {
-          print("Author");
-        },
-        child: Container(
-          child: Text(
-            "Author",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-      Divider(
-        color: Colors.black,
-      ),
-      InkWell(
-        onTap: () {
-          print("Status");
-        },
-        child: Container(
-          child: Text(
-            "Status",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    ];
-  }
+  // List<Widget> get newMethod {
+  //   return
+  // }
 }
