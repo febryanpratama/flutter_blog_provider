@@ -2,21 +2,19 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_provider/models/blog/data_detail_blog_model.dart';
 import 'package:flutter_blog_provider/models/blog/detail_blog_model.dart';
-import 'package:flutter_blog_provider/modules/home/dropdown_model.dart';
 import 'package:flutter_blog_provider/repository/blog/blog_repository.dart';
 import 'package:flutter_blog_provider/utils/routes/routes_name.dart';
 
 class HomeController extends ChangeNotifier {
   final BlogRepository _blogRepository = BlogRepository();
 
-  List<dynamic>? _data = [];
-  List<dynamic>? get blog => _data;
+  
+  List<dynamic>? blog;
 
   DetailDataModelNew? detailBlog;
+
   bool isLoading = false;
-  // DetailDataModelNew? get detailBlog => _detailBlog;
   bool isLoadData = false;
 
   String? selectedOption = "published";
@@ -27,29 +25,48 @@ class HomeController extends ChangeNotifier {
   String paramDate = "no";
   String paramStatus = "no";
 
+  int? publishedCount = 0;
+  int? draftCount = 0;
+
   // String? get selectedOption => _selectedOption;
 
-  void setSelectedOption(String newOption) {
+  Future<void>? setSelectedOption(String newOption) {
     // print("newOption${newOption}");
     selectedOption = newOption;
     print("printselected${selectedOption}");
     notifyListeners();
   }
-  // String? get selectedLocation => _selectedLocation;
 
-  // get Blog
-
-  // Future.delayed(duration)
-  Future<void> getBlog() async {
+  Future<void> getBlog({String? newAuthor}) async {
     isLoadData = true;
+    // print("parammm${paramDate}");
 
-    var resp = await _blogRepository.getBLog(paramAuthor, paramDate, paramStatus);
-    _data = resp?.data;
+      var resp = await _blogRepository.getBLog(newAuthor ?? paramAuthor, paramDate, paramStatus);
+      blog = resp?.data;
 
-    // print("resp${resp}");
+      var listPublished = [];
+      var listDraft = [];
+      
+      if(resp?.data.length != 0){
 
-    print(blog?[0].title);
+        for (var i = 0; i < resp?.data.length ;i++) {
+          
+          if (resp?.data[i].status == "published") {
+            listPublished.add(resp?.data[i]);
+          } else {
+            listDraft.add(resp?.data[i]);
+          }
+        }
+      }
+
+      publishedCount = listPublished.length;
+      draftCount = listDraft.length;
+
+
+    // print(blog?[0].title);
     isLoadData = false;
+
+    // print(blog?[0].toJson());
     notifyListeners();
   }
 
@@ -100,18 +117,29 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  Future<void> setAuthor(String newAuthor) async {
-    paramAuthor = newAuthor;
-    await getBlog();
-  }
+  // Future<void> setAuthor(String? newAuthor) async {
+  //   // isLoadData = true;
+  //   paramAuthor = newAuthor ?? "no";
+  //   await getBlog();
 
-  Future<void> setStatus(String newStatus) async {
-    paramStatus = newStatus;
+  //   notifyListeners();
+  // }
+
+  Future<void> setStatus(String? newStatus) async {
+    paramStatus = newStatus ?? "no";
     // notifyListeners();
 
     await getBlog();
+    notifyListeners();
   }
 
+  Future setDate(String? newDate) async {
+    paramDate = newDate ?? "no";
+
+    print("paramDate${paramDate}");
+    await getBlog();
+    notifyListeners();
+  }
 
   void initialValue() {
     // _detailBlog = {};

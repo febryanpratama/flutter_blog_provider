@@ -5,7 +5,7 @@ import 'package:flutter_blog_provider/modules/home/home_controller.dart';
 import 'package:provider/provider.dart';
 
 class DetailBlogView extends StatelessWidget {
-  DetailBlogView({super.key, args});
+  DetailBlogView({super.key});
 
   final TextEditingController _title = TextEditingController();
   final TextEditingController _author = TextEditingController();
@@ -90,11 +90,6 @@ class DetailBlogView extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: 16, fontWeight: FontWeight.w700),
                                   ),
-                                  // Text(
-                                  //   "${value.detailBlog?['createdAt']}",
-                                  //   style: TextStyle(
-                                  //       fontSize: 16, fontWeight: FontWeight.w700),
-                                  // ),
                                 ],
                               ),
                             ),

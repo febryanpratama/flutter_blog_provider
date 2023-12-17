@@ -14,11 +14,11 @@ class HomeView extends StatelessWidget {
     'Author',
   ];
 
-
   @override
   Widget build(BuildContext context) {
     // final arguments =
-    List<int> data = [5, 10, 11, 21, 34];
+    // List<int> data = [5, 10, 11, 21, 34];
+    List<String> date = ["today", "week", "month", "year"];
     return ChangeNotifierProvider(
       create: (context) => HomeController()..getBlog(),
       builder: (context, child) {
@@ -45,71 +45,100 @@ class HomeView extends StatelessWidget {
                         child: GridView.count(
                           // shrinkWrap: true,
                           padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
                           childAspectRatio: (1 / .4),
-                          crossAxisCount: 4,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xFFFCEED4),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                "Today",
-                                style: TextStyle(
-                                  color: Color(0xFFFCAC12),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white10,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                "Week",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white10,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                "Month",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white10,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                "Year",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                            ),
-                          ],
+                          crossAxisCount: date.length,
+                          children: [...date.map((val) {
+                            return Consumer<HomeController>(
+                              builder: (context, prod, _) {
+                                return InkWell(
+                                  onTap: (){
+                                    prod.setDate(val);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: val == prod.paramDate ? Color(0xFFFCAC12) : Colors.white10,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      val.toUpperCase(),
+                                      style: TextStyle(
+                                        color:  val == prod.paramDate ? Colors.white :Colors.grey,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
+                                  ),
+                                );
+                              }
+                            );
+                          }).toList(),
+                          ]
+                          // [
+                          //   Container(
+                          //     decoration: BoxDecoration(
+                          //       color: Color(0xFFFCEED4),
+                          //       borderRadius: BorderRadius.circular(25),
+                          //     ),
+                          //     child: Center(
+                          //         child: Text(
+                          //       "Today",
+                          //       style: TextStyle(
+                          //         color: Color(0xFFFCAC12),
+                          //         fontSize: 16,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          //     )),
+                          //   ),
+                          //   Container(
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.white10,
+                          //       borderRadius: BorderRadius.circular(25),
+                          //     ),
+                          //     child: Center(
+                          //         child: Text(
+                          //       "Week",
+                          //       style: TextStyle(
+                          //         color: Colors.grey,
+                          //         fontSize: 16,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          //     )),
+                          //   ),
+                          //   Container(
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.white10,
+                          //       borderRadius: BorderRadius.circular(25),
+                          //     ),
+                          //     child: Center(
+                          //         child: Text(
+                          //       "Month",
+                          //       style: TextStyle(
+                          //         color: Colors.grey,
+                          //         fontSize: 16,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          //     )),
+                          //   ),
+                          //   Container(
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.white10,
+                          //       borderRadius: BorderRadius.circular(25),
+                          //     ),
+                          //     child: Center(
+                          //         child: Text(
+                          //       "Year",
+                          //       style: TextStyle(
+                          //         color: Colors.grey,
+                          //         fontSize: 16,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          //     )),
+                          //   ),
+                          // ],
                         ),
                       ),
                     ),
@@ -146,8 +175,8 @@ class HomeView extends StatelessWidget {
                             ),
                           ),
                           InkWell(
-                            onTap: () {
-                              showModalBottomSheet(
+                            onTap: () async {
+                              var data = await showModalBottomSheet(
                                 isScrollControlled: false,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
@@ -175,14 +204,17 @@ class HomeView extends StatelessWidget {
                                         SizedBox(
                                           height: 20,
                                         ),
-                                        Expanded(
-                                          child: FilterComponent()
-                                        )
+                                        Expanded(child: FilterComponent())
                                       ],
                                     ),
                                   );
                                 },
                               );
+                              if (data != null) {
+                                Provider.of<HomeController>(context,
+                                        listen: false)
+                                    .getBlog(newAuthor: data);
+                              }
                             },
                             child: Icon(
                               Icons.list_outlined,
@@ -198,8 +230,8 @@ class HomeView extends StatelessWidget {
                     ),
                     Consumer<HomeController>(
                         builder: (context, dataProvider, _) {
-                      print(dataProvider.blog?[0]);
-                      if (dataProvider.isLoadData!) {
+                      // print(dataProvider.blog?[0].toJson());
+                      if (dataProvider.isLoadData) {
                         return Center(
                           child: CircularProgressIndicator(),
                         );

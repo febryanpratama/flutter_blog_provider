@@ -10,45 +10,53 @@ class FilterComponent extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => HomeController(),
       builder: (context, child) {
-        return ListView(
-          children: [
-            InkWell(
-              onTap: () {
-                // print("author");
-                var param = Provider.of<HomeController>(context, listen: false).paramAuthor;
-                Provider.of<HomeController>(context, listen: false).setAuthor(param == "yes" ? "no" : "yes");
-              },
-              child: Container(
-                child: Text(
-                  "Author",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+        return Consumer<HomeController>(
+          builder: (context, val, _) {
+            return ListView(
+              children: [
+                InkWell(
+                  onTap: () {
+                    // print("author");
+                    // var param = val.paramAuthor;
+                    // val.getBlog(newAuthor: "yes");
+                    // val.setAuthor(param == "yes" ? "no" : "yes");
+                    // print('paramAuthor${val.paramAuthor}');
+                    Navigator.pop(context, "yes");
+                  },
+                  child: Container(
+                    child: Text(
+                      "Author",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Divider(
-              color: Colors.black,
-            ),
-            InkWell(
-              onTap: () {
-                var param = Provider.of<HomeController>(context, listen: false).paramStatus;
-                Provider.of<HomeController>(context, listen: false).setStatus(param == "yes" ? "no" : "yes");
-              },
-              child: Container(
-                child: Text(
-                  "Status",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                Divider(
+                  color: Colors.black,
+                ),
+                InkWell(
+                  onTap: () {
+                    // var param = val.paramStatus;
+                    // val.setStatus(param == "yes" ? "no" : "yes");
+                    Navigator.pop(context, "no");
+                  },
+                  child: Container(
+                    child: Text(
+                      "Status",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          }
         );
       }
     );
