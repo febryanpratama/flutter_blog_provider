@@ -37,7 +37,7 @@ class Api extends BaseApi {
             'Accept' : 'application/json',
             'Authorization': 'Bearer $token',
           },body: jsonEncode(params));
-          
+          // print(response.toJson());
         }else if(method == EnumData.PATCH){
           response =  await http.patch(Uri.parse(uri),body: jsonEncode(params));
         }else if(method == EnumData.DELETE){
@@ -50,7 +50,7 @@ class Api extends BaseApi {
         }else if(response.statusCode == 201){
           return json.decode(response.body);
         } else if(response.statusCode == 400){
-          return null;
+          print("errr${response.body}");
         } 
     } catch (e) {
       print(e); 

@@ -5,9 +5,13 @@ import 'package:provider/provider.dart';
 class SheetBottom extends StatelessWidget {
   final List<String> listDropdown;
   final String initValue;
+  final int id;
 
-  const SheetBottom({super.key, required this.listDropdown, required this.initValue});
+  SheetBottom({super.key, required this.listDropdown, required this.initValue, required this.id});
 
+  TextEditingController _author = TextEditingController();
+  TextEditingController _title = TextEditingController();
+  TextEditingController _content = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,7 @@ class SheetBottom extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: TextFormField(
                   // controller: TextEditingController(text: value.setTitle),
-                  // controller: _title,
+                  controller: _title,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -76,7 +80,7 @@ class SheetBottom extends StatelessWidget {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: TextFormField(
-                  // controller: _author,
+                  controller: _author,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -105,7 +109,7 @@ class SheetBottom extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: TextFormField(
                   keyboardType: TextInputType.multiline,
-                  // controller: _content,
+                  controller: _content,
                   maxLines: 8,
                   maxLength: 1000,
                   decoration: InputDecoration(
@@ -145,17 +149,22 @@ class SheetBottom extends StatelessWidget {
               SizedBox(
                 height: 14,
               ),
-              Container(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // value.updateBlog(context,
-                    //     id: argument['id'],
-                    //     author: _author.text,
-                    //     title: _title.text,
-                    //     content: _content.text);
-                  },
-                  child: Text("Update"),
-                ),
+              Consumer<HomeController>(
+                builder: (context, value, _) {
+                  return Container(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // print(id);
+                        value.updateBlog(context,
+                            id: id,
+                            author: _author.text,
+                            title: _title.text,
+                            content: _content.text);
+                      },
+                      child: Text("Update"),
+                    ),
+                  );
+                }
               )
             ],
           ),

@@ -43,6 +43,7 @@ class DetailDataModelNew {
     dynamic deletedAt;
     DateTime createdAt;
     DateTime updatedAt;
+    List<Comment> comments;
 
     DetailDataModelNew({
         required this.id,
@@ -55,6 +56,7 @@ class DetailDataModelNew {
         required this.deletedAt,
         required this.createdAt,
         required this.updatedAt,
+        required this.comments,
     });
 
     factory DetailDataModelNew.fromJson(Map<String, dynamic> json) => DetailDataModelNew(
@@ -68,6 +70,7 @@ class DetailDataModelNew {
         deletedAt: json["deleted_at"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        comments: List<Comment>.from(json["comments"].map((x) => Comment.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -78,6 +81,47 @@ class DetailDataModelNew {
         "author": author,
         "status": status,
         "published_at": publishedAt,
+        "deleted_at": deletedAt,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
+    };
+}
+
+class Comment {
+    int id;
+    int blogId;
+    int userId;
+    String comment;
+    dynamic deletedAt;
+    DateTime createdAt;
+    DateTime updatedAt;
+
+    Comment({
+        required this.id,
+        required this.blogId,
+        required this.userId,
+        required this.comment,
+        required this.deletedAt,
+        required this.createdAt,
+        required this.updatedAt,
+    });
+
+    factory Comment.fromJson(Map<String, dynamic> json) => Comment(
+        id: json["id"],
+        blogId: json["blog_id"],
+        userId: json["user_id"],
+        comment: json["comment"],
+        deletedAt: json["deleted_at"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "blog_id": blogId,
+        "user_id": userId,
+        "comment": comment,
         "deleted_at": deletedAt,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),

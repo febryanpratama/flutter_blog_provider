@@ -43,13 +43,13 @@ class BlogRepository extends Api {
         "status": status,
       };
 
-      // print(params);
-      var response = await put('/user/blog', params: params);
+      print(params);
+      // var response = await put('/user/blog', params: params);
 
       // print("responserepository${response}");
-      if(response != null){
-        return response;
-      }
+      // if(response != null){
+      //   return response;
+      // }
       return null;
 
     }
@@ -73,5 +73,24 @@ class BlogRepository extends Api {
       }
       return null;
     }
+
+    Future addComment(
+      int id, String comment
+    ) async {
+      var params = {
+        "blog_id": id,
+        "comment": comment,
+      };
+
+      // print(params);
+
+      var response = await post('/user/blog/comment', params: params);
+
+      if(response != null){
+        return response;
+      }
+      return null;
+    }
+    
 
 }

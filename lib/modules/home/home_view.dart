@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_provider/modules/home/_components/appbar_component.dart';
 import 'package:flutter_blog_provider/modules/home/_components/filter_component.dart';
 import 'package:flutter_blog_provider/modules/home/_components/header_view.dart';
 import 'package:flutter_blog_provider/modules/home/home_controller.dart';
@@ -29,6 +30,7 @@ class HomeView extends StatelessWidget {
               bottomOpacity: 0.0,
               elevation: 0.0,
             ),
+            // appBar: PreferredSize(child: AppBarCostum(), preferredSize: Size.fromHeight(150)),
             body: SafeArea(
               child: Container(
                 height: MediaQuery.of(context).size.height,

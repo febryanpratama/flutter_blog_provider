@@ -117,6 +117,22 @@ class HomeController extends ChangeNotifier {
     }
   }
 
+  Future addComment(context,{ required int id, required String comment}) async {
+    try {
+      var resp = await _blogRepository.addComment(id, comment);
+      print("resp${resp}");
+      if (resp != null) {
+        Navigator.pushNamed(context, RoutesName.home);
+      }
+    } catch (e) {
+      print("err");
+      print(e.toString());
+    }
+
+    notifyListeners();
+
+  }
+
   // Future<void> setAuthor(String? newAuthor) async {
   //   // isLoadData = true;
   //   paramAuthor = newAuthor ?? "no";
